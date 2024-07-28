@@ -13,7 +13,7 @@ router = APIRouter()
 async def upload_csv(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
-    webhook_url: str = Form(...),
+    webhook_url: str = Form(None),
 ):
     if not file.filename.endswith(".csv"):
         raise HTTPException(status_code=400, detail="Invalid file format")
@@ -29,7 +29,7 @@ async def upload_csv(
                 product_name=row["Product Name"],
                 input_image_urls=row["Input Image Urls"].split(","),
                 request_id=request_id,
-                webhook_url=webhook_url,
+                webhook_url=webhook_url if webhook_url else ""
             ).model_dump(by_alias=True)
         )
 
