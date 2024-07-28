@@ -68,7 +68,7 @@ def process_images(request_id: str, all_requests):
             }
         )
 
-        if req.get("webhook_url"):
+        if req.get("webhook_url") !='':
             httpx.post(
                 req["webhook_url"],
                 json={
