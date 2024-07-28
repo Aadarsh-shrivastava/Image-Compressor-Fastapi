@@ -42,13 +42,16 @@ async def upload_csv(
 
 @router.get("/status/{request_id}")
 async def get_status(request_id: str):
-    request = await db["image_requests"].find({"request_id": request_id}).to_list(None)
-    request = request[-1]
-    print(request)
+    requests = await db["image_requests"].find({"request_id": request_id}).to_list(None)
+    output_urls={}
+    for request in requests:
+        output_urls[request['product_name']]=request['output_image_urls']
+        
+    request = requests[-1]
     if not request:
         raise HTTPException(status_code=404, detail="Request not found")
     
     if(request["status"]=='completed'):
-        return {"request_id": request_id, "status": request["status"],"output_urls":request["output_image_urls"]}
+        return {"request_id": request_id, "status": request["status"],"output_urls":output_urls}
     
     return {"request_id": request_id, "status": request["status"]}
