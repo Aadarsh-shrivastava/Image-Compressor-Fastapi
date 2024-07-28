@@ -47,5 +47,8 @@ async def get_status(request_id: str):
     print(request)
     if not request:
         raise HTTPException(status_code=404, detail="Request not found")
-
+    
+    if(request["status"]=='completed'):
+        return {"request_id": request_id, "status": request["status"],"output_urls":request["output_image_urls"]}
+    
     return {"request_id": request_id, "status": request["status"]}
